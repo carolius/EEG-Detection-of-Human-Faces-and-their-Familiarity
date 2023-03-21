@@ -1,0 +1,7 @@
+import:
+  - ../mini-graphs/broker.yaml
+  - ../mini-graphs/eeg_events_lsl.yaml
+  - ./process_data_collector.yaml
+  - ./psychopy_1_FnF.yaml
+  - ./monitor.yaml 
+  - ./save_epochs.yaml 

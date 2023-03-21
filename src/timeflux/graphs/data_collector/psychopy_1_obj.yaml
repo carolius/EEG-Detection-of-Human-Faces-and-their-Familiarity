@@ -1,0 +1,21 @@
+graphs:
+  # ======= Psychopy =======
+  - id: PsychopyGraph
+    nodes: 
+            
+      - id: Psychopy
+        module: timeflux.nodes_dev.psychopy_demo_obj
+        class: MyPsychopyNode
+
+      - id: Debugger
+        module: timeflux.nodes.debug
+        class: Display
+
+    # edges: 
+    #   - source: Subscriber:prediction
+    #     target: Psychopy
+    #   # - source: Subscriber:predictions
+    #   #   target: Debugger
+
+
+    rate: 1 

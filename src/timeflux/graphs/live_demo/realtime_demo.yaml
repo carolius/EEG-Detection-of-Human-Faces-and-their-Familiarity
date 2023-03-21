@@ -1,0 +1,33 @@
+graphs:
+  # ======= Psychopy =======
+  - id: PsychopyGraph
+    nodes: 
+
+      - id: pub
+        module: timeflux.nodes.zmq
+        class: Pub
+        params:
+          topic: status_events
+
+      - id: sub
+        module: timeflux.nodes.zmq
+        class: Sub
+        params:
+          topics: [predictions] 
+
+      - id: Psychopy
+        module: timeflux.nodes_dev.rt_psychopy
+        class: MyPsychopyNode
+
+      - id: Debugger
+        module: timeflux.nodes.debug
+        class: Display
+
+    edges: 
+      - source: Psychopy:status_events
+        target: pub
+      - source: sub:predictions
+        target: Psychopy:predictions
+
+
+    rate: 5

@@ -1,0 +1,7 @@
+import:
+  - ../mini-graphs/broker.yaml
+  - ../mini-graphs/eeg_events_lsl.yaml
+  - ./processing.yaml
+  - ./realtime_demo.yaml
+  - ./monitor.yaml 
+  - ./save_epochs.yaml 

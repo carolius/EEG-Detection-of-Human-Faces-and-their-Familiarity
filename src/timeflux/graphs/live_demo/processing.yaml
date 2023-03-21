@@ -1,0 +1,71 @@
+graphs:
+  # ====== Processing Graph ========
+  - id: ProcessingGraph
+    nodes:
+      - id: Debugger
+        module: timeflux.nodes.debug
+        class: Display
+
+      - id: sub
+        module: timeflux.nodes.zmq
+        class: Sub
+        params:
+          topics: [eeg_raw, events, status_events]
+      #       # - eeg_raw
+      #       # - events
+      #       # - status_events
+
+      - id: bandpass_filter
+        module: timeflux_dsp.nodes.filters
+        class: FIRFilter
+        params:
+          frequencies: [0.1, 1, 20, 21]
+          order: 20
+
+      - id: pub_predictions
+        module: timeflux.nodes.zmq
+        class: Pub
+        params:
+          topic: predictions
+
+      - id: epochs
+        module: timeflux.nodes_dev.epoch
+        class: Epoch
+        params:
+          before: 0.2
+          after: 0.9 # To have a few more samples than needed (good if epochs are trimmed)
+          event_trigger: stimuli_marker #999 #n # data type depends on choise of input
+
+      - id: trim
+        module: timeflux.nodes_dev.epoch
+        class: Trim
+        params:
+          samples: 256 # 4 seconds of data.
+
+      - id: fit_and_predict
+        module: timeflux.nodes_dev.rt_fit_predict
+        class: Pipeline
+
+    edges:
+      - source: sub:eeg_raw
+        target: bandpass_filter
+      - source: bandpass_filter
+        target: epochs
+      - source: sub:events
+        target: epochs:events
+      - source: epochs
+        target: trim
+      - source: trim:0
+        target: fit_and_predict:epochs_in
+      # - source: fit_and_predict:epochs_out
+      #   target: pub_:eeg_epochs
+      # - source: trim:0
+      #   target: Debugger
+      - source: fit_and_predict:predictions
+        target: pub_predictions
+      - source: sub:status_events
+        target: fit_and_predict:status_events
+      - source: fit_and_predict:predictions
+        target: Debugger
+
+    rate: 5

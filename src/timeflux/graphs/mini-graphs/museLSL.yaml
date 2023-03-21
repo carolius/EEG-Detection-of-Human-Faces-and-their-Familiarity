@@ -1,0 +1,8 @@
+graphs: 
+
+#  ===== Start Muselsl stream =====
+  - id: StartMuseLSLStream-Graph
+    nodes: 
+      - id: StartMuseLSLStream
+        module: timeflux.nodes_dev.start_muse_stream
+        class: StartMuse

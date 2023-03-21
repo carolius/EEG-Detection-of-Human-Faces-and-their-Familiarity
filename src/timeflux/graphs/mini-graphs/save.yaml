@@ -1,0 +1,27 @@
+graphs:
+  - id: Save
+    nodes:
+      - id: sub
+        module: timeflux.nodes.zmq
+        class: Sub
+        params:
+          topics: [events, eeg_raw]
+
+      - id: save
+        module: timeflux.nodes.hdf5
+        class: Save
+        params:
+          path: ../data/replay_data #../../data # test, does it work?
+          #filename: predictions_{{ FILE|default('my_variable is not defined') }}.hdf5 # What happen is no param is given? {{ my_variable|default('my_variable is not defined') }}
+
+      - id: display
+        module: timeflux.nodes.debug
+        class: Display
+
+    edges:
+      - source: sub:events
+        target: save:events
+      - source: sub:eeg_raw
+        target: save:eeg_raw
+#      - source: sub:events
+#        target: display

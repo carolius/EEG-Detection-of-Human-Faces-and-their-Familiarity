@@ -1,0 +1,55 @@
+graphs:
+
+  # ===== Graph connecting with the LSL from MuseS =====
+  #
+  # Reads the raw LSL stream from MuseS and publishes it on the topic "raw"
+  #
+  - id: Receive_LSL
+    nodes:
+    # Receive EEG signal from the lsl-stream
+    - id: eeg_LSL_receiver
+      module: timeflux.nodes_dev.lsl
+      class: Receive
+      params:
+        prop: type
+        value: EEG
+        sync: null
+        drop: Right AUX
+    # Receive EEG signal from the lsl-stream
+    - id: markers_LSL_receiver
+      module: timeflux.nodes_dev.lsl
+      class: Receive
+      params:
+        prop: type
+        value: Markers
+        sync: null
+        # prop: name
+        # value: MarkersName
+        channels: [label, data]
+    # Publish the raw EEG signal
+    - id: pub_eeg
+      module: timeflux.nodes.zmq
+      class: Pub
+      params:
+        topic: eeg_raw
+    # Publish the raw EEG signal
+    - id: pub_markers
+      module: timeflux.nodes.zmq
+      class: Pub
+      params:
+        topic: events
+    # If we want to display something
+    - id: display
+      module: timeflux.nodes.debug
+      class: Display
+
+    # Connect nodes
+    edges:
+      - source: eeg_LSL_receiver
+        target: pub_eeg
+      - source: markers_LSL_receiver
+        target: pub_markers
+      # - source: markers_LSL_receiver
+      #   target: display
+    # Run this graph X times per second
+    rate: 5 # CHANGE TO 0 (or someting else)?

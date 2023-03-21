@@ -1,0 +1,58 @@
+graphs:
+  # ====== Processing Graph ========
+  - id: ProcessingGraph
+    nodes:
+      - id: Debugger
+        module: timeflux.nodes.debug
+        class: Display
+
+      - id: sub
+        module: timeflux.nodes.zmq
+        class: Sub
+        params:
+          topics:
+            - eeg_raw
+            - events
+
+      - id: bandpass_filter
+        module: timeflux_dsp.nodes.filters
+        class: FIRFilter
+        params:
+          frequencies: [0.1, 0.2, 20.0, 20.1]
+          order: 20
+
+      - id: pub_eeg_epochs
+        module: timeflux.nodes.zmq
+        class: Pub
+        params:
+          topic: eeg_epochs
+
+      - id: epochs
+        module: timeflux.nodes_dev.epoch
+        class: Epoch
+        params:
+          before: 0.1
+          after: 0.6 # To have a few more samples than needed (good if epochs are trimmed)
+          event_trigger: stimuli_marker #999 #n # data type depends on choise of input
+
+      - id: trim
+        module: timeflux.nodes_dev.epoch
+        class: Trim
+        params:
+          samples: 170 # 4 seconds of data.
+
+    edges:
+      - source: sub:eeg_raw
+        target: bandpass_filter
+      - source: bandpass_filter
+        target: epochs
+      - source: sub:events
+        target: epochs:events
+      - source: epochs
+        target: trim
+      - source: trim:0
+        target: pub_eeg_epochs
+      - source: trim:0
+        target: Debugger
+
+    rate: 2

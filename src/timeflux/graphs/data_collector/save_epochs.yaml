@@ -1,0 +1,37 @@
+graphs:
+  - id: Save
+    nodes:
+      - id: sub
+        module: timeflux.nodes.zmq
+        class: Sub
+        params:
+          topics:
+            - eeg_epochs
+
+      #- id: save
+      #  module: timeflux.nodes.hdf5
+      #  class: Save
+      #  params:
+      #    path: ../../data/{{ SUBJECT |default("Subj_0") }}
+      #    filename: session_{{ SESSION|default('0') }}.hdf5
+
+      - id: save_numpy
+        module: timeflux.nodes_dev.save_numpy_2
+        class: SaveNumpy
+        params:
+          data_folder: ../../data/
+          subject: {{ SUBJECT |default("subject0001") }} # use 'timeflux -d -e SUBJECT="xxx" yyy.yaml' to set this paramater
+          session: {{ SESSION |default("session0001") }}   # use 'timeflux -d -e SESSION="xxx" yyy.yaml' to set this paramater
+
+
+      - id: Debugger
+        module: timeflux.nodes.debug
+        class: Display
+
+    edges:
+      #- source: sub:eeg_epochs
+      #  target: save
+      - source: sub:eeg_epochs
+        target: save_numpy
+      #- source: sub:eeg_raw
+    #    target: Debugger

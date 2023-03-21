@@ -1,0 +1,32 @@
+graphs:
+  - id: MonitorGraph
+    nodes:
+    - id: sub
+      module: timeflux.nodes.zmq
+      class: Sub
+      params:
+        topics:
+        - eeg_raw
+        - predictions
+    - id: monitor
+      module: timeflux_ui.nodes.ui
+      class: UI
+    - id: display
+      module: timeflux.nodes.debug
+      class: Display
+    - id: pub
+      module: timeflux.nodes.zmq
+      class: Pub
+      params:
+        topic: events
+
+    edges:
+      # - source: sub:eeg_raw
+      #   target: monitor:eeg_raw
+      - source: sub:predictions
+        target: monitor:predictions
+      - source: monitor:events # raw or bands
+        target: display
+      - source: monitor:events # raw or bands
+        target: pub
+    rate: 2
