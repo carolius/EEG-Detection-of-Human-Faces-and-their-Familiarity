@@ -1,20 +1,20 @@
 # Detection of Human Faces and their Familiarity
 
-This project sets out to detect whether a face, displayed on a screen in front of the test subject, is familiar or not-familiar by using the EEG signals recorded from a Muse-S. The Muse-S has four electrodes, two temporal and two frontal (TP9, TP10 and AF7, AF8 respectively) and can be connected wirelessly via bluetooth. We also explore another experiement involving the detection of images including a human face from those without a human face. 
+This project sets out to detect whether a face, displayed on a screen in front of the test subject, is familiar or not-familiar by using the EEG signals recorded from a Muse-S. The Muse-S has four electrodes, two temporal and two frontal (TP9, TP10 and AF7, AF8 respectively) and can be connected wirelessly via bluetooth. Another experiement involving the detection of images including a human face from those without a human face is also explored. 
 
-In this repository you will find all the information and code necessary to run your own EEG experiment. The easiest way to ensure you have all the 
-necessary dependancies to run our projects, we provide detailed instructions on how to set up a new conda environment so that everything will run smoothly.
+In this repository you will find all the information and code necessary to run your own EEG experiment. This is the easiest way to ensure you have all the 
+necessary dependancies to run the project, detailed instructions on how to set up a new conda environment are provided so that everything will run smoothly.
 
 ### First time setup:
 1. Clone this git repository into a fresh directory.
 
-2. If using conda, first create a new environment (here we call it bci3.7 since we are using python 3.7) and activate it. 
+2. If using conda, first create a new environment (here it is called bci3.7 since it uses python 3.7) and activate it. 
 
         conda create -n "bci3.7" python==3.7 git pip wxpython
         
         conda activate bci3.7
 
-    Next clone the `eeg-notebooks` repository, using it to inform pip of all the packages we will need.
+    Next clone the `eeg-notebooks` repository, using it to inform pip of all the packages needed.
            
         git clone https://github.com/NeuroTechX/eeg-notebooks
         
@@ -22,7 +22,7 @@ necessary dependancies to run our projects, we provide detailed instructions on 
         
         pip install -e .
 
-    Finally we need to install `timeflux` `timeflux-ui` `timeflux-dsp` and `liblsl`. 
+    Finally you need to install `timeflux` `timeflux-ui` `timeflux-dsp` and `liblsl`. 
 
         pip install timeflux
 
@@ -32,7 +32,7 @@ necessary dependancies to run our projects, we provide detailed instructions on 
     muselsl 2.2.0 requires pylsl==1.10.5, but you have pylsl 1.15.0 which is incompatible.
     >
 
-    To resolve this we revert back to an earlier version of `timeflux`.
+    To resolve this revert back to an earlier version of `timeflux`.
 
         pip install timeflux=0.10.1
         conda install -c conda-forge liblsl
@@ -75,7 +75,7 @@ This application first display a series of images in order to generate a trainin
 For each subsequent image the application records the signal and makes a prediction about the class of the image displayed. Classification accuracy is reported as an average.
 
 ### Familiar Face Dataset
-The team has removed all 'familiar-face' datasets for privacy reasons. If you wish to replicate this experiment feel free to upload your own folder of images to the same directory and update the psychopy file `rt_psychopy.py` found in `src\timeflux\nodes_dev`
+All'familiar-face' datasets have been removed for privacy reasons. If you wish to replicate this experiment feel free to upload your own folder of images to the same directory and update the psychopy file `rt_psychopy.py` found in `src\timeflux\nodes_dev`
 
 Under the __init__() method in this file you can change the folder name to match the new folder you have added.
 
