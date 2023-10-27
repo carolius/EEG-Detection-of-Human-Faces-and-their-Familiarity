@@ -80,7 +80,7 @@ All'familiar-face' datasets have been removed for privacy reasons. If you wish t
 Under the __init__() method in this file you can change the folder name to match the new folder you have added.
 
     class_1 = "Marcus Faces"
-    class_2 = "non-face images"
+    class_2 = "non-familar-faces"
     self.img_from_each_class = 5
 
 Make sure that twice the amount of `self.img_from_each_class` is in each folder as the program creates a trainining and validation dataset.
